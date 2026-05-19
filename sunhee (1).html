@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SunHee — Korean & Japanese Cuisine · Darmstadt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a120b;
+    --rice: #f5f0e8;
+    --gold: #c9933a;
+    --ember: #b84c2e;
+    --moss: #3d5a3e;
+    --mist: #e8e2d4;
+    --cream: #faf7f2;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Karla', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201,147,58,0.2);
+    animation: fadeDown 0.8s ease both;
+  }
+  .nav-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none; opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-text {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 4rem 5rem;
+    position: relative; z-index: 2;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.4rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 2rem; height: 1px; background: var(--gold);
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.8rem);
+    line-height: 1.08;
+    font-weight: 400;
+    margin-bottom: 1.6rem;
+    color: var(--ink);
+  }
+  h1 em { font-style: italic; color: var(--ember); }
+  .hero-sub {
+    font-size: 1.05rem; line-height: 1.7; color: #4a3f35;
+    max-width: 38ch; margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.9rem 2rem; font-family: 'Karla', sans-serif;
+    font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .btn-primary {
+    background: var(--ink); color: var(--cream);
+  }
+  .btn-primary:hover { background: var(--ember); }
+  .btn-outline {
+    background: transparent; color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn-outline:hover { background: var(--ink); color: var(--cream); }
+
+  .hero-visual {
+    position: relative; overflow: hidden;
+    animation: fadeIn 1.2s 0.2s ease both;
+  }
+  .hero-visual::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(201,147,58,0.15) 0%, rgba(184,76,46,0.1) 100%);
+    z-index: 1;
+  }
+  .hero-visual img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: sepia(15%) contrast(1.05);
+  }
+  .hero-badge {
+    position: absolute; bottom: 3rem; left: -1.5rem; z-index: 3;
+    background: var(--gold); color: white;
+    padding: 1.2rem 1.8rem; font-family: 'Noto Serif KR', serif;
+    box-shadow: 6px 6px 0 var(--ember);
+    animation: fadeUp 1s 0.7s ease both;
+  }
+  .hero-badge .stars { font-size: 0.7rem; letter-spacing: 0.1em; margin-bottom: 0.3rem; opacity: 0.9; }
+  .hero-badge .rating { font-size: 1.8rem; font-weight: 600; line-height: 1; }
+  .hero-badge .label { font-size: 0.65rem; letter-spacing: 0.1em; opacity: 0.85; text-transform: uppercase; }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--ink); color: var(--gold);
+    padding: 0.9rem 0; overflow: hidden;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.9rem; letter-spacing: 0.1em;
+  }
+  .marquee-inner {
+    display: flex; width: max-content;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-inner span { padding: 0 2.5rem; white-space: nowrap; }
+  .marquee-inner span::after { content: '◆'; margin-left: 2.5rem; opacity: 0.5; }
+
+  /* ── ABOUT ── */
+  .about {
+    padding: 7rem 5rem;
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem;
+    align-items: center; max-width: 1400px; margin: 0 auto;
+  }
+  .about-label {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+  }
+  .about h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.2; font-weight: 400; margin-bottom: 1.8rem;
+  }
+  .about p {
+    font-size: 1rem; line-height: 1.85; color: #4a3f35;
+    margin-bottom: 1.2rem;
+  }
+  .stats {
+    display: flex; gap: 3rem; margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--mist);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; color: var(--ember); line-height: 1;
+  }
+  .stat-label { font-size: 0.78rem; color: #7a6e65; letter-spacing: 0.05em; margin-top: 0.3rem; }
+  .about-image-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    position: relative;
+  }
+  .about-image-grid img {
+    width: 100%; aspect-ratio: 3/4; object-fit: cover;
+    filter: sepia(10%);
+  }
+  .about-image-grid img:first-child {
+    margin-top: 3rem;
+  }
+  .about-image-grid::after {
+    content: '선희'; font-family: 'Noto Serif KR', serif;
+    font-size: 5rem; font-weight: 600; color: var(--gold);
+    opacity: 0.08; position: absolute; bottom: -1rem; right: -1rem;
+    pointer-events: none; z-index: -1;
+  }
+
+  /* ── MENU HIGHLIGHTS ── */
+  .menu-section {
+    background: var(--ink);
+    padding: 7rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .menu-section::before {
+    content: '';
+    position: absolute; top: -5rem; right: -5rem;
+    width: 30rem; height: 30rem; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,147,58,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .menu-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 4rem; max-width: 1400px; margin-left: auto; margin-right: auto;
+  }
+  .menu-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+    color: var(--rice); font-weight: 400;
+  }
+  .menu-header h2 em { font-style: italic; color: var(--gold); }
+  .menu-header p { color: rgba(245,240,232,0.55); font-size: 0.9rem; max-width: 28ch; text-align: right; line-height: 1.6; }
+  
+  .menu-tabs {
+    display: flex; gap: 0.5rem; margin-bottom: 3rem;
+    max-width: 1400px; margin-left: auto; margin-right: auto;
+  }
+  .tab {
+    padding: 0.55rem 1.4rem; font-size: 0.75rem; letter-spacing: 0.12em;
+    text-transform: uppercase; cursor: pointer; border: 1px solid rgba(201,147,58,0.3);
+    color: rgba(245,240,232,0.5); background: transparent;
+    font-family: 'Karla', sans-serif; transition: all 0.2s;
+  }
+  .tab.active, .tab:hover {
+    background: var(--gold); border-color: var(--gold);
+    color: var(--ink);
+  }
+
+  .menu-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .menu-card {
+    background: rgba(245,240,232,0.04);
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(201,147,58,0.1);
+    transition: background 0.3s, border-color 0.3s;
+    cursor: default;
+  }
+  .menu-card:hover {
+    background: rgba(201,147,58,0.08);
+    border-color: rgba(201,147,58,0.3);
+  }
+  .menu-card-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .menu-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; color: var(--rice); font-weight: 400;
+    margin-bottom: 0.6rem;
+  }
+  .menu-card .kr { font-family: 'Noto Serif KR', serif; font-size: 0.75rem; color: var(--gold); opacity: 0.7; margin-bottom: 0.8rem; }
+  .menu-card p { font-size: 0.88rem; line-height: 1.7; color: rgba(245,240,232,0.55); }
+  .menu-card .price { margin-top: 1.2rem; font-size: 0.8rem; color: var(--gold); letter-spacing: 0.05em; }
+
+  /* ── EXPERIENCE ── */
+  .experience {
+    padding: 7rem 5rem;
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 6rem; align-items: center;
+  }
+  .experience-visual {
+    position: relative;
+  }
+  .experience-visual img {
+    width: 100%; aspect-ratio: 4/5; object-fit: cover;
+    filter: sepia(10%) contrast(1.02);
+  }
+  .experience-visual .pullquote {
+    position: absolute; bottom: -2rem; right: -2.5rem;
+    background: var(--ember); color: white;
+    padding: 1.8rem 2rem; max-width: 22rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.05rem; line-height: 1.5;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .pullquote .attr { font-family: 'Karla', sans-serif; font-style: normal; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; margin-top: 0.8rem; }
+  .experience h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem); font-weight: 400; margin-bottom: 1.8rem;
+    line-height: 1.2;
+  }
+  .features { list-style: none; margin: 2rem 0; }
+  .features li {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.1rem 0; border-bottom: 1px solid var(--mist);
+    font-size: 0.95rem; line-height: 1.6; color: #4a3f35;
+  }
+  .features li .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .features li strong { display: block; color: var(--ink); margin-bottom: 0.2rem; font-weight: 500; }
+
+  /* ── HOURS & CONTACT ── */
+  .info-section {
+    background: var(--mist);
+    padding: 7rem 5rem;
+  }
+  .info-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4rem;
+  }
+  .info-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 400; margin-bottom: 1.8rem;
+    padding-bottom: 1rem; border-bottom: 2px solid var(--gold);
+  }
+  .hours-row {
+    display: flex; justify-content: space-between;
+    padding: 0.65rem 0; border-bottom: 1px solid rgba(0,0,0,0.07);
+    font-size: 0.9rem;
+  }
+  .hours-row .day { color: #4a3f35; }
+  .hours-row .time { color: var(--ink); font-weight: 500; }
+  .hours-row.closed .time { color: var(--ember); }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.5rem; font-size: 0.92rem; line-height: 1.6;
+  }
+  .contact-item .c-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .contact-item a { color: var(--ink); text-decoration: none; }
+  .contact-item a:hover { color: var(--gold); }
+  .map-placeholder {
+    background: var(--ink);
+    height: 100%; min-height: 280px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-family: 'Noto Serif KR', serif;
+    font-size: 1.1rem; letter-spacing: 0.05em;
+    position: relative; overflow: hidden;
+    cursor: pointer; transition: opacity 0.2s;
+  }
+  .map-placeholder:hover { opacity: 0.85; }
+  .map-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(201,147,58,0.05) 10px, rgba(201,147,58,0.05) 11px
+    );
+  }
+  .map-placeholder span { position: relative; z-index: 1; text-align: center; }
+  .map-placeholder .map-hint { font-family: 'Karla', sans-serif; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; display: block; margin-top: 0.5rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(245,240,232,0.5);
+    padding: 3rem 5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.8rem; letter-spacing: 0.05em;
+  }
+  .footer-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.1rem; color: var(--gold); font-weight: 600;
+  }
+  footer a { color: rgba(245,240,232,0.5); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--gold); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(2rem);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── KEYFRAMES ── */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-1rem); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp   { from { opacity: 0; transform: translateY(2rem); } to { opacity: 1; transform: none; } }
+  @keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes marquee  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-text { padding: 7rem 1.5rem 3rem; }
+    .hero-visual { height: 60vw; }
+    .hero-badge { display: none; }
+    .about, .experience { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+    .about-image-grid { display: none; }
+    .menu-section { padding: 4rem 1.5rem; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .menu-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .menu-header p { text-align: left; }
+    .info-section { padding: 4rem 1.5rem; }
+    .info-inner { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    .experience-visual .pullquote { position: static; margin-top: 1rem; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Sun<span>Hee</span></a>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#visit">Visit Us</a></li>
+    <li><a href="tel:+4915901963034" class="btn btn-primary" style="padding:0.55rem 1.3rem;">Reserve</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Darmstadt · Since 2023</p>
+    <h1>Where Korea<br>meets <em>Japan</em></h1>
+    <p class="hero-sub">Authentic flavors, freshest ingredients, and the warmth of East Asian hospitality — right in the heart of Eberstadt.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn btn-primary">Explore Menu</a>
+      <a href="#visit" class="btn btn-outline">Find Us</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=900&q=80" alt="Korean and Japanese dishes">
+    <div class="hero-badge">
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <div class="rating">4.6</div>
+      <div class="label">Google Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span>Sushi & Sashimi</span>
+    <span>비빔밥 Bibimbap</span>
+    <span>김밥 Kimbap</span>
+    <span>Korean BBQ</span>
+    <span>Poke Bowl</span>
+    <span>Ramen</span>
+    <span>Kimchi</span>
+    <span>Takeaway Welcome</span>
+    <span>Sushi & Sashimi</span>
+    <span>비빔밥 Bibimbap</span>
+    <span>김밥 Kimbap</span>
+    <span>Korean BBQ</span>
+    <span>Poke Bowl</span>
+    <span>Ramen</span>
+    <span>Kimchi</span>
+    <span>Takeaway Welcome</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="reveal">
+    <p class="about-label">Our Story</p>
+    <h2>A culinary bridge between two great traditions</h2>
+    <p>SunHee (선희) brings together the bold, communal spirit of Korean cuisine and the precise, delicate craft of Japanese cooking. Every dish is made with care, using only the freshest ingredients sourced for quality and taste.</p>
+    <p>Tucked away on Heidelberger Landstrasse in Darmstadt-Eberstadt, we offer a cozy, welcoming space for families, couples, and food lovers — whether dining in or taking away.</p>
+    <div class="stats">
+      <div>
+        <div class="stat-num">4.6★</div>
+        <div class="stat-label">Google Rating</div>
+      </div>
+      <div>
+        <div class="stat-num">€10–30</div>
+        <div class="stat-label">Price per Person</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Cuisines, One Soul</div>
+      </div>
+    </div>
+  </div>
+  <div class="about-image-grid reveal">
+    <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&q=80" alt="Sushi platter">
+    <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=600&q=80" alt="Bibimbap bowl">
+  </div>
+</section>
+
+<!-- MENU HIGHLIGHTS -->
+<section class="menu-section" id="menu">
+  <div class="menu-header reveal">
+    <h2>Our <em>Favourites</em></h2>
+    <p>A carefully curated selection of Korean & Japanese classics — made fresh, every day.</p>
+  </div>
+  <div class="menu-tabs">
+    <button class="tab active" onclick="filterMenu('all', this)">All</button>
+    <button class="tab" onclick="filterMenu('korean', this)">Korean</button>
+    <button class="tab" onclick="filterMenu('japanese', this)">Japanese</button>
+    <button class="tab" onclick="filterMenu('vegetarian', this)">Vegetarian</button>
+  </div>
+  <div class="menu-grid" id="menuGrid">
+    <div class="menu-card reveal" data-cat="korean vegetarian">
+      <div class="menu-card-icon">🍚</div>
+      <h3>Bibimbap</h3>
+      <div class="kr">비빔밥</div>
+      <p>Warm rice topped with seasoned vegetables, gochujang, and a fried egg. Our most beloved dish — a perfect harmony of textures and flavours.</p>
+      <div class="price">from €11</div>
+    </div>
+    <div class="menu-card reveal" data-cat="japanese">
+      <div class="menu-card-icon">🍣</div>
+      <h3>Sushi Selection</h3>
+      <div class="kr">스시</div>
+      <p>Nigiri, maki, and uramaki rolls prepared with daily-fresh fish and seasoned sushi rice. Classic and inventive varieties available.</p>
+      <div class="price">from €13</div>
+    </div>
+    <div class="menu-card reveal" data-cat="korean">
+      <div class="menu-card-icon">🥢</div>
+      <h3>Kimbap</h3>
+      <div class="kr">김밥</div>
+      <p>Korean rice rolls with vegetables, egg, and your choice of filling, wrapped in roasted nori. Light, satisfying, and wonderfully fresh.</p>
+      <div class="price">from €9</div>
+    </div>
+    <div class="menu-card reveal" data-cat="japanese vegetarian">
+      <div class="menu-card-icon">🥗</div>
+      <h3>Poke Bowl</h3>
+      <div class="kr">포케볼</div>
+      <p>Hawaiian-Japanese fusion bowl with seasoned rice, fresh toppings, and house-made sauces. Highly rated by our guests for its freshness.</p>
+      <div class="price">from €12</div>
+    </div>
+    <div class="menu-card reveal" data-cat="korean">
+      <div class="menu-card-icon">🥩</div>
+      <h3>Korean BBQ</h3>
+      <div class="kr">불고기</div>
+      <p>Marinated meats grilled to perfection, served with banchan side dishes. The quintessential Korean communal dining experience.</p>
+      <div class="price">from €16</div>
+    </div>
+    <div class="menu-card reveal" data-cat="japanese">
+      <div class="menu-card-icon">🍜</div>
+      <h3>Ramen</h3>
+      <div class="kr">라멘</div>
+      <p>Rich, slow-simmered broth with handcrafted noodles, soft egg, nori, and your choice of toppings. Soul-warming and deeply flavourful.</p>
+      <div class="price">from €13</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience" id="experience">
+  <div class="experience-visual reveal">
+    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" alt="Restaurant interior">
+    <div class="pullquote">
+      "Absolutely fresh and delicious Korean food. Our favourite is the bibimbap — superb."
+      <div class="attr">— Guest Review, Google</div>
+    </div>
+  </div>
+  <div class="reveal">
+    <p class="about-label">The SunHee Experience</p>
+    <h2>Cosy, casual, and genuinely delicious</h2>
+    <ul class="features">
+      <li><span class="icon">🌿</span><div><strong>Fresh Ingredients, Every Day</strong>Dishes are prepared to order using only the freshest produce and proteins — you can taste the difference.</div></li>
+      <li><span class="icon">🫀</span><div><strong>Warm & Welcoming Atmosphere</strong>A cosy neighbourhood spot, perfect for family dinners, date nights, or a solo lunch.</div></li>
+      <li><span class="icon">🥬</span><div><strong>Vegetarian-Friendly</strong>A wide range of plant-based options across both cuisines, highly recommended by our guests.</div></li>
+      <li><span class="icon">🛍️</span><div><strong>Takeaway Available</strong>Can't stay? Order your favourites to go — many guests enjoy SunHee at home.</div></li>
+      <li><span class="icon">💳</span><div><strong>Cards & NFC Accepted</strong>Pay easily with debit card, credit card, or contactless mobile payment.</div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- HOURS & CONTACT -->
+<section class="info-section" id="visit">
+  <div class="info-inner">
+    <div class="info-block reveal">
+      <h3>Opening Hours</h3>
+      <div class="hours-row closed"><span class="day">Monday</span><span class="time">Closed</span></div>
+      <div class="hours-row"><span class="day">Tuesday</span><span class="time">12–15h · 17–21:30h</span></div>
+      <div class="hours-row"><span class="day">Wednesday</span><span class="time">12–15h · 17–21:30h</span></div>
+      <div class="hours-row"><span class="day">Thursday</span><span class="time">12–15h · 17–21:30h</span></div>
+      <div class="hours-row"><span class="day">Friday</span><span class="time">12–15h · 17–21:30h</span></div>
+      <div class="hours-row"><span class="day">Saturday</span><span class="time">12–15h · 17–21:30h</span></div>
+      <div class="hours-row"><span class="day">Sunday</span><span class="time">12–15h · 17–21:30h</span></div>
+      <p style="font-size:0.78rem; color:#7a6e65; margin-top:1rem; line-height:1.5;">During peak hours, wait times may be longer. We recommend calling ahead, especially on weekends.</p>
+    </div>
+    <div class="info-block reveal">
+      <h3>Contact & Find Us</h3>
+      <div class="contact-item">
+        <span class="c-icon">📍</span>
+        <div>Heidelberger Landstrasse 228<br>64297 Darmstadt-Eberstadt<br>Germany</div>
+      </div>
+      <div class="contact-item">
+        <span class="c-icon">📞</span>
+        <div><a href="tel:+4915901963034">+49 1590 196 3034</a><br><span style="font-size:0.8rem;color:#7a6e65;">For reservations & enquiries</span></div>
+      </div>
+      <div class="contact-item">
+        <span class="c-icon">🚌</span>
+        <div>Public transport nearby<br><span style="font-size:0.8rem;color:#7a6e65;">Free parking available (1 hr)</span></div>
+      </div>
+      <div class="contact-item">
+        <span class="c-icon">💳</span>
+        <div>Debit · Credit · NFC/Mobile Pay</div>
+      </div>
+      <a href="tel:+4915901963034" class="btn btn-primary" style="margin-top:1rem; width:100%; justify-content:center;">📞 Call to Reserve</a>
+    </div>
+    <div class="info-block reveal">
+      <h3>Location</h3>
+      <a href="https://www.google.com/maps/search/SunHee+Korean+Japanese+Cuisine+Darmstadt" target="_blank" style="display:block;height:calc(100% - 5rem);min-height:260px;">
+        <div class="map-placeholder" style="height:100%">
+          <span>
+            선희<br>
+            <span class="map-hint">Open in Google Maps →</span>
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SunHee 선희</div>
+  <div>Korean & Japanese Cuisine · Darmstadt, Germany</div>
+  <div>© 2025 SunHee · <a href="tel:+4915901963034">+49 1590 196 3034</a></div>
+</footer>
+
+<script>
+  // Image fallbacks
+  document.querySelectorAll('img').forEach(img => {
+    img.onerror = function() {
+      const ph = document.createElement('div');
+      ph.style.cssText = 'width:100%;height:100%;min-height:300px;background:linear-gradient(135deg,#1a120b 0%,#3d2b1a 100%);display:flex;align-items:center;justify-content:center;color:#c9933a;font-family:serif;font-size:2.5rem;';
+      ph.textContent = '선희';
+      this.parentNode.replaceChild(ph, this);
+    };
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Menu filter
+  function filterMenu(cat, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.menu-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat.includes(cat)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>

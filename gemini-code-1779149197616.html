@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yash Verma — AI/ML Engineer & Product Strategist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Indian Maximalism Palette */
+  --bg-dark: #110c08; /* Deep warm espresso */
+  --text-main: #fcf6eb; /* Parchment/Chai cream */
+  --text-muted: #c9bcae;
+  
+  --vermilion: #d33c27; /* Rich terracotta red */
+  --marigold: #e8a628; /* Warm mustard gold */
+  --indigo: #233d54; /* Deep rich blue */
+  --mehendi: #4a5c40; /* Deep emerald green */
+
+  --card-bg: rgba(25, 18, 12, 0.7);
+  --border-ornate: 1px solid rgba(232, 166, 40, 0.2);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom Cursor */
+.cursor {
+  position: fixed; width: 8px; height: 8px; background: var(--marigold);
+  border-radius: 50%; pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+}
+.cursor-ring {
+  position: fixed; width: 40px; height: 40px;
+  border: 1px dashed var(--vermilion); border-radius: 50%;
+  pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+  transition: transform 0.18s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+  animation: spin 10s linear infinite;
+}
+@keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+body:hover .cursor { opacity: 1; }
+a:hover ~ .cursor, button:hover ~ .cursor { background: var(--vermilion); transform: translate(-50%, -50%) scale(1.5); }
+a:hover ~ .cursor-ring { border-style: solid; border-color: var(--marigold); width: 50px; height: 50px; }
+
+/* Vibrant Ambient Glows (Orbs) */
+.orb {
+  position: absolute; border-radius: 50%; filter: blur(140px); z-index: -2; opacity: 0.5;
+  animation: float 25s infinite ease-in-out alternate;
+}
+.orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--vermilion); }
+.orb-2 { top: 40%; right: -20%; width: 60vw; height: 60vw; background: var(--indigo); animation-delay: -5s; }
+.orb-3 { bottom: -10%; left: 20%; width: 45vw; height: 45vw; background: var(--marigold); animation-delay: -10s; }
+@keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 100px) scale(1.1); } }
+
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 24px 60px; display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.6s, padding 0.4s, border-bottom 0.4s;
+}
+nav.scrolled {
+  background: rgba(17, 12, 8, 0.95); backdrop-filter: blur(12px);
+  padding: 16px 60px; border-bottom: var(--border-ornate);
+}
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600;
+  color: var(--marigold); letter-spacing: 2px; text-decoration: none;
+}
+.nav-brand span { color: var(--vermilion); }
+.nav-links { display: flex; gap: 40px; list-style: none; align-items: center;}
+.nav-links a {
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-main); text-decoration: none; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--marigold); }
+
+/* --- SECTION BACKGROUND BLENDING & PARALLAX --- */
+section, footer { position: relative; padding: 140px 60px; z-index: 1; }
+
+.bg-blend::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1; background-size: cover; background-position: center;
+  pointer-events: none;
+  background-attachment: fixed; /* Parallax Effect */
+  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+
+/* Image Assignments & Adjustments */
+.hero.bg-blend::before { 
+  background-image: url("lotus mudra.jpeg"); 
+  opacity: 0.15; mix-blend-mode: luminosity; 
+  background-size: auto 90%; 
+  background-position: 95% center; /* Shifted further right to avoid text */
+  background-repeat: no-repeat;
+}
+#experience.bg-blend::before { 
+  background-image: url("_ (4).jpeg"); 
+  opacity: 0.12; mix-blend-mode: color-dodge; 
+}
+#projects.bg-blend::before { 
+  background-image: url("Art mural du patrimoine culturel, illustration inspirée de la technologie, affiche conceptuelle moderne.jpeg"); 
+  opacity: 0.25; mix-blend-mode: screen; 
+  background-size: 400px; /* Zoomed out to preserve crispness */
+  background-repeat: repeat; 
+}
+#services.bg-blend::before { 
+  background-image: url("Crafts Map of India _ Sahapedia.jpeg"); 
+  opacity: 0.18; mix-blend-mode: overlay; 
+}
+#traveloggue.bg-blend::before { 
+  background-image: url("post stamp design.jpeg"); 
+  opacity: 0.15; mix-blend-mode: luminosity; 
+}
+
+/* 65-35 Footer Stamp Collage */
+.footer-cta.bg-blend::before { 
+  background-image: 
+    url("letter box.jpeg"),
+    url("_ (5).jpeg"),
+    url("Tirupati Temple Poster Design _ Indian Vintage Stamp Style Graphic Design.jpeg"),
+    url("Elephant _ India Postage Stamp _ Handmade Limited Edition Linocut Print.jpeg"),
+    url("Uttarakhand Sticker.jpeg"),
+    url("Bikaner-.jpeg"),
+    url("jodhpur-.jpeg"),
+    url("post stamp design (1).jpeg"),
+    url("afae9186617483.5d9edb0181744.jpg"); 
+  
+  opacity: 0.25; 
+  mix-blend-mode: luminosity; 
+  
+  /* Sizing for the collage pieces */
+  background-size: 
+    25% auto, /* Letterbox (Right) */
+    18% auto, /* Stamp 5 */
+    20% auto, /* Tirupati */
+    15% auto, /* Elephant */
+    16% auto, /* Uttarakhand */
+    12% auto, /* Bikaner */
+    12% auto, /* Jodhpur */
+    10% auto, /* Post Stamp 1 */
+    18% auto; /* Chithi */
+    
+  /* Positioning to create a scattered mural on the left ~60% */
+  background-position: 
+    95% center, /* Letterbox */
+    2% 15%,     /* Stamp 5 */
+    25% 10%,    /* Tirupati */
+    12% 45%,    /* Elephant */
+    35% 40%,    /* Uttarakhand */
+    28% 85%,    /* Bikaner */
+    10% 80%,    /* Jodhpur */
+    45% 80%,    /* Post Stamp 1 */
+    5% 95%;     /* Chithi */
+    
+  background-repeat: no-repeat;
+}
+
+/* Base Content Container inside sections */
+.content-wrapper { position: relative; z-index: 2; }
+
+/* Hero */
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+.hero-eyebrow {
+  font-size: 13px; letter-spacing: 6px; text-transform: uppercase; color: var(--marigold); margin-bottom: 24px;
+  animation: fadeUp 1s ease forwards 0.2s; opacity: 0; transform: translateY(20px); display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before { content: ''; display: block; width: 40px; height: 1px; background: var(--vermilion); }
+.hero-title {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(60px, 9vw, 120px);
+  font-weight: 400; line-height: 0.95; color: var(--text-main); margin-bottom: 32px;
+  animation: fadeUp 1.2s ease forwards 0.4s; opacity: 0; transform: translateY(30px);
+}
+.hero-title em { font-style: italic; font-weight: 600; color: var(--vermilion); }
+.hero-subtitle {
+  font-size: 19px; line-height: 1.7; color: var(--text-muted); max-width: 650px;
+  animation: fadeUp 1s ease forwards 0.6s; opacity: 0; transform: translateY(20px);
+}
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+/* Section Titles */
+.section-title {
+  font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 400; margin-bottom: 60px;
+  border-bottom: 1px solid rgba(211, 60, 39, 0.3); padding-bottom: 20px; display: inline-block;
+}
+.section-title em { font-style: italic; color: var(--marigold); }
+
+/* Ornate Cards - Updated Hover Colors (Mehendi Green) */
+.glass-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 40px; }
+.glass-card {
+  background: var(--card-bg); backdrop-filter: blur(16px);
+  border: var(--border-ornate); border-top: 3px solid var(--vermilion);
+  padding: 48px; position: relative; transition: transform 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s;
+  display: flex; flex-direction: column;
+}
+.glass-card::before, .glass-card::after { content: '✤'; position: absolute; color: var(--marigold); opacity: 0.3; font-size: 12px; }
+.glass-card::before { top: 12px; left: 12px; }
+.glass-card::after { bottom: 12px; right: 12px; }
+.glass-card:hover {
+  transform: translateY(-8px); 
+  /* Mehendi Green Glow */
+  background: rgba(74, 92, 64, 0.3); 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  border-color: rgba(232, 166, 40, 0.6);
+}
+.card-icon { font-size: 36px; margin-bottom: 24px; filter: drop-shadow(0 2px 4px rgba(211,60,39,0.4)); }
+.card-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 16px; font-weight: 600;}
+.card-desc { font-size: 16px; line-height: 1.8; color: var(--text-muted); flex-grow: 1; }
+.card-meta { margin-top: 24px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--marigold); }
+.card-link {
+  display: inline-block; margin-top: 24px; font-size: 12px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text-main); text-decoration: none;
+  border-bottom: 1px solid var(--vermilion); padding-bottom: 4px; transition: color 0.3s, border-color 0.3s; align-self: flex-start;
+}
+.card-link:hover { color: var(--marigold); border-color: var(--marigold); }
+
+/* Dual Marquee */
+.marquee-container {
+  background: rgba(17, 12, 8, 0.9); border-top: 1px solid rgba(232, 166, 40, 0.15); border-bottom: 1px solid rgba(232, 166, 40, 0.15);
+  padding: 24px 0; display: flex; flex-direction: column; gap: 16px; overflow: hidden; position: relative; z-index: 5;
+}
+.marquee-wrap { width: 100%; overflow: hidden; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; }
+.marquee-inner { display: flex; width: max-content; }
+.marquee-left { animation: marquee-l 35s linear infinite; }
+.marquee-right { animation: marquee-r 35s linear infinite; }
+.marquee-wrap:hover .marquee-inner { animation-play-state: paused; }
+.marquee-inner span, .marquee-inner a { padding: 0 40px; white-space: nowrap; color: var(--text-muted); text-decoration: none; transition: color 0.3s;}
+.marquee-inner a:hover { color: var(--vermilion); cursor: none; text-shadow: 0 0 8px rgba(211, 60, 39, 0.5); }
+.marquee-inner span::after, .marquee-inner a::after { content: '✦'; margin-left: 40px; color: var(--marigold); opacity: 0.5; }
+@keyframes marquee-l { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marquee-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* Agency Hub Section Custom - Warm Gradient */
+.agency-hub {
+  background: linear-gradient(135deg, rgba(211, 60, 39, 0.15), rgba(232, 166, 40, 0.1));
+  backdrop-filter: blur(8px); border: 1px solid var(--vermilion); padding: 60px; border-radius: 4px;
+  margin-bottom: 60px; text-align: center;
+}
+.agency-hub h3 { font-family: 'Cormorant Garamond', serif; font-size: 48px; margin-bottom: 20px; color: var(--marigold);}
+.agency-hub p { font-size: 18px; color: var(--text-main); max-width: 800px; margin: 0 auto 32px; line-height: 1.8;}
+
+/* Postage Stamp Style for Demos */
+.demo-header { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 30px; text-align: center; }
+.stamp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.stamp-card {
+  background: var(--text-main); color: var(--bg-dark); padding: 25px; position: relative;
+  background-image: radial-gradient(var(--bg-dark) 4px, transparent 4px);
+  background-size: 20px 20px; background-position: -10px -10px;
+  border: 10px solid transparent; box-shadow: 0 15px 40px rgba(0,0,0,0.6); transition: transform 0.3s;
+}
+.stamp-card:hover { transform: rotate(-1deg) scale(1.02); }
+.stamp-inner {
+  background: #f4eee1; padding: 30px; height: 100%; border: 1px solid #d4c5b0; display: flex; flex-direction: column;
+}
+.stamp-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin-bottom: 12px; color: var(--vermilion);}
+.stamp-desc { font-size: 15px; line-height: 1.6; color: #5a4f44; flex-grow: 1;}
+.stamp-link { 
+  margin-top: 20px; font-size: 11px; font-weight: 600; letter-spacing: 2px; 
+  text-transform: uppercase; color: var(--indigo); text-decoration: none; border-bottom: 2px solid var(--marigold); align-self: flex-start;
+}
+
+/* Scroll Reveal */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+
+/* Buttons */
+.btn {
+  display: inline-block; background: var(--vermilion); color: var(--text-main);
+  padding: 16px 48px; border: 1px solid var(--marigold);
+  text-decoration: none; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  font-weight: 600; transition: background 0.3s, color 0.3s;
+}
+.btn:hover { background: var(--marigold); color: var(--bg-dark); cursor: none;}
+
+/* Footer */
+.footer-cta { text-align: center; padding: 160px 60px; border-top: var(--border-ornate); }
+.footer-cta h2 { font-family: 'Cormorant Garamond', serif; font-size: 72px; font-weight: 400; margin-bottom: 40px; color: var(--marigold);}
+.footer-links { margin-top: 80px; display: flex; justify-content: center; gap: 40px;}
+.footer-links a { color: var(--text-muted); text-decoration: none; letter-spacing: 2px; font-size: 13px; text-transform: uppercase; transition: color 0.3s;}
+.footer-links a:hover { color: var(--vermilion); }
+
+@media (max-width: 900px) {
+  nav { padding: 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 0 30px; }
+  .hero-title { font-size: 56px; }
+  section, footer { padding: 80px 30px; }
+  .stamp-grid { grid-template-columns: 1fr; }
+  .footer-cta h2 { font-size: 48px; }
+  /* Simplified mobile fallback for footer collage */
+  .footer-cta.bg-blend::before {
+    background-image: url("letter box.jpeg"), url("afae9186617483.5d9edb0181744.jpg");
+    background-size: 40% auto, 50% auto;
+    background-position: center bottom, center 10%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<nav id="nav">
+  <a class="nav-brand" href="#">Y<span>V</span>.</a>
+  <ul class="nav-links">
+    <li><a href="#experience">Journey</a></li>
+    <li><a href="#projects">Research & AI</a></li>
+    <li><a href="#services">Digital Agency</a></li>
+    <li><a href="#traveloggue">Traveloggue</a></li>
+    <li><a href="#contact" style="color: var(--vermilion);">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero bg-blend">
+  <div class="content-wrapper">
+    <div class="hero-eyebrow">Indian Roots · German Precision</div>
+    <div class="hero-title">Building <em>Intelligence.</em><br>Crafting Journeys.</div>
+    <div class="hero-subtitle">
+      I am Yash Verma, a Full-stack AI/ML Software Engineer and Product Strategist currently pursuing my M.Sc. at TU Darmstadt. I bridge rich cultural storytelling with highly scalable technical architectures.
+    </div>
+  </div>
+</section>
+
+<div class="marquee-container">
+  <div class="marquee-wrap">
+    <div class="marquee-inner marquee-left">
+      <span>Python</span><span>ReactJS</span><span>TypeScript</span><span>Node.js</span><span>C/C++</span><span>MongoDB</span><span>TensorFlow</span><span>AWS</span>
+      <span>Python</span><span>ReactJS</span><span>TypeScript</span><span>Node.js</span><span>C/C++</span><span>MongoDB</span><span>TensorFlow</span><span>AWS</span>
+    </div>
+  </div>
+  <div class="marquee-wrap">
+    <div class="marquee-inner marquee-right">
+      <a href="https://bcert.me/bc/html/show-badge.html?b=qgfiiyrf" target="_blank">Scrum Alliance CSPO</a>
+      <a href="https://www.salesforce.com/trailblazer/yashverma7" target="_blank">Salesforce Associate</a>
+      <a href="https://learn.microsoft.com/api/credentials/share/en-in/YashVerma-2356/F27FB1383B2E5C27?sharingId=3FEE1E3E7267D31F" target="_blank">MS Azure Fundamentals</a>
+      <a href="https://www.credly.com/badges/992c2839-6a81-4b83-886d-ab1dbec345c1/email" target="_blank">AWS Cloud Practitioner</a>
+      <a href="https://bcert.me/bc/html/show-badge.html?b=qgfiiyrf" target="_blank">Scrum Alliance CSPO</a>
+      <a href="https://www.salesforce.com/trailblazer/yashverma7" target="_blank">Salesforce Associate</a>
+      <a href="https://learn.microsoft.com/api/credentials/share/en-in/YashVerma-2356/F27FB1383B2E5C27?sharingId=3FEE1E3E7267D31F" target="_blank">MS Azure Fundamentals</a>
+      <a href="https://www.credly.com/badges/992c2839-6a81-4b83-886d-ab1dbec345c1/email" target="_blank">AWS Cloud Practitioner</a>
+    </div>
+  </div>
+</div>
+
+<section id="experience" class="bg-blend">
+  <div class="content-wrapper">
+    <h2 class="section-title reveal">Professional <em>Journey</em></h2>
+    <div class="glass-grid">
+      <div class="glass-card reveal">
+        <div class="card-icon">🏛️</div>
+        <h3 class="card-title">M.Sc. AI & ML</h3>
+        <div class="card-meta">TU Darmstadt • 2025 — Present</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          Specializing in scalable cloud architectures, generative AI, and correctness-oriented model development. Bridging strict academic research with agile product execution in Germany.
+        </p>
+      </div>
+      <div class="glass-card reveal delay-1">
+        <div class="card-icon">⚙️</div>
+        <h3 class="card-title">Software Engineer</h3>
+        <div class="card-meta">UnitedHealth Group / Optum • 2022 — 2025</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          Developed core technical features for OnePass, an AI-driven wellness platform serving 500k+ users. Engineered CI/CD pipelines to shorten release cycles by 20% and drastically reduced post-release bugs.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="bg-blend">
+  <div class="content-wrapper">
+    <h2 class="section-title reveal">Research & <em>Innovation</em></h2>
+    <div class="glass-grid">
+      <div class="glass-card reveal">
+        <h3 class="card-title">CiteLM</h3>
+        <div class="card-meta">React, Python, VLLM, MongoDB</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          A full-stack, web-based system for evaluating RAG attribution methods. Architected a modular backend API orchestrating document retrieval and local LLM serving (Qwen via VLLM).
+        </p>
+      </div>
+      
+      <div class="glass-card reveal delay-1">
+        <h3 class="card-title">Beyond Plausibility</h3>
+        <div class="card-meta">AI Code Generation Architecture</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          Co-authored research analyzing failure modes in AI code generation. Proposed a two-phase hybrid architecture combining immediate type-safe generation with asynchronous background verification.
+        </p>
+      </div>
+
+      <div class="glass-card reveal delay-2">
+        <h3 class="card-title">Virtual Traffic Police</h3>
+        <div class="card-meta">OpenCV, TensorFlow, OCR</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          Engineered an automated system to detect traffic rule violators using computer vision and optical character recognition, reporting infractions directly to authorities.
+        </p>
+      </div>
+
+      <div class="glass-card reveal">
+        <h3 class="card-title">Smart Traffic Management</h3>
+        <div class="card-meta">Hackathon Award Winner</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          Formulated an intelligent model to handle traffic systems, reduce accidents, and optimize emergency situation management. Awarded <em>Best Debutant</em> at CSI Hackathon 3.0.
+        </p>
+      </div>
+
+      <div class="glass-card reveal delay-1">
+        <h3 class="card-title">Trashin</h3>
+        <div class="card-meta">Android Studio, Maps API, Firebase</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          Built a comprehensive trash pickup scheduling service. The app allows users to seamlessly schedule, track, and pay for waste collection, mapping the best routing paths to the nearest facilities.
+        </p>
+      </div>
+
+      <div class="glass-card reveal delay-2">
+        <h3 class="card-title">5G & Connected Vehicles</h3>
+        <div class="card-meta">Academic Publication</div>
+        <p class="card-desc" style="margin-top: 16px;">
+          <em>"Impact of 5G on the Internet of Connected Vehicles and Challenges"</em> — Published under Lecture Notes in Networks and Systems by Springer, Soft Computing (SoCTA 2021).
+        </p>
+        <a href="https://link.springer.com/chapter/10.1007/978-981-19-0707-4_32" target="_blank" class="card-link">Read Publication</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="bg-blend">
+  <div class="content-wrapper">
+    <h2 class="section-title reveal">Digital <em>Transformation</em></h2>
+    
+    <div class="agency-hub reveal">
+      <h3>Darmstadt Web Agency</h3>
+      <p>My primary freelance platform. I specialize in building highly-customizable, performant online presences that move beyond generic templates—integrating bespoke branding, modern UIs, and smart AI workflows for small and medium businesses.</p>
+      <a href="https://darmstadt.netlify.app/" target="_blank" class="btn">Visit Agency Platform</a>
+    </div>
+
+    <div class="demo-header reveal">Client Archives & Live Demos</div>
+    <div class="stamp-grid">
+      
+      <div class="stamp-card reveal">
+        <div class="stamp-inner">
+          <div class="stamp-title">SunHee</div>
+          <div class="stamp-desc">A modern, culturally rich landing page for a local Korean & Japanese restaurant featuring menu filtering and aesthetic, typography-driven UI design.</div>
+          <a href="./sunhee/index.html" target="_blank" class="stamp-link">View Live Demo →</a>
+        </div>
+      </div>
+
+      <div class="stamp-card reveal delay-1">
+        <div class="stamp-inner">
+          <div class="stamp-title">Kaffeehaus</div>
+          <div class="stamp-desc">An elegant, highly interactive website for a premium coffee house in Eberstadt, featuring custom reservation workflows and smooth scroll-reveal animations.</div>
+          <a href="./kaffeehaus/index.html" target="_blank" class="stamp-link">View Live Demo →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="traveloggue" class="bg-blend">
+  <div class="content-wrapper">
+    <h2 class="section-title reveal">Brand Building: <em>Traveloggue</em></h2>
+    <div class="glass-card reveal" style="max-width: 800px; margin: 0 auto; text-align: center; border-top: 3px solid var(--marigold);">
+      <div class="card-icon">🪷</div>
+      <h3 class="card-title">Founder & Content Creator</h3>
+      <p class="card-desc" style="margin-top: 16px; font-size: 19px; color: var(--text-main);">
+        Curating highly engaging travel itineraries and visual stories. Translating vibrant aesthetics into compelling digital content and building a brand from the ground up through strategic product culture and audience engagement.
+      </p>
+      <a href="https://www.traveloggue.com" target="_blank" class="btn" style="margin-top: 40px;">Explore Traveloggue</a>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="footer-cta bg-blend reveal">
+  <div class="content-wrapper">
+    <h2>Good things take time.<br><em>Let's build together.</em></h2>
+    <a href="mailto:vermayash9999@gmail.com" class="btn">Get in touch</a>
+    
+    <div class="footer-links">
+      <a href="https://linkedin.com/in/yash-verma-in" target="_blank">LinkedIn</a>
+      <a href="https://www.traveloggue.com" target="_blank">Traveloggue</a>
+      <a href="https://darmstadt.netlify.app/" target="_blank">Agency</a>
+    </div>
+    
+    <div style="margin-top: 60px; font-size: 11px; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase;">
+      © 2026 Yash Verma. Crafted with intent.
+    </div>
+  </div>
+</footer>
+
+<script>
+// Custom Cursor (Global)
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('curRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  curRing.style.left = rx + 'px'; curRing.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// Nav Scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Scroll Reveal
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>

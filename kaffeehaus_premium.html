@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaffeehaus — Eberstadt, Darmstadt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --espresso: #1a0d05;
+  --dark-roast: #2c1a0e;
+  --mahogany: #3d2512;
+  --caramel: #8a5c2a;
+  --gold: #c9a87a;
+  --cream: #f5ede0;
+  --parchment: #f0e6d3;
+  --milk: #faf6f0;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  background: var(--espresso);
+  color: var(--cream);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+}
+.cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 0.5px solid rgba(201,168,122,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
+}
+body:hover .cursor { opacity: 1; }
+
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 28px 60px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.6s, padding 0.4s;
+}
+nav.scrolled {
+  background: rgba(26,13,5,0.95);
+  backdrop-filter: blur(12px);
+  padding: 16px 60px;
+  border-bottom: 0.5px solid rgba(201,168,122,0.1);
+}
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(245,237,224,0.6);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* Hero */
+.hero {
+  height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 60px 80px;
+  position: relative;
+  overflow: hidden;
+  background: var(--espresso);
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 60%, rgba(61,37,18,0.8) 0%, transparent 70%),
+              radial-gradient(ellipse at 80% 20%, rgba(138,92,42,0.12) 0%, transparent 50%);
+}
+.hero-lines {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.hero-line {
+  position: absolute;
+  background: rgba(201,168,122,0.04);
+  transform-origin: left center;
+}
+.hero-line:nth-child(1) { width: 1px; height: 100%; left: 15%; animation: lineFade 4s ease-in-out infinite; }
+.hero-line:nth-child(2) { width: 1px; height: 100%; left: 30%; animation: lineFade 4s ease-in-out 0.5s infinite; }
+.hero-line:nth-child(3) { width: 100%; height: 1px; top: 33%; animation: lineFade 4s ease-in-out 1s infinite; }
+.hero-line:nth-child(4) { width: 100%; height: 1px; top: 66%; animation: lineFade 4s ease-in-out 1.5s infinite; }
+@keyframes lineFade { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+.hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease forwards 0.3s;
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(70px, 12vw, 130px);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -2px;
+  color: var(--cream);
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeUp 1.2s ease forwards 0.5s;
+  margin-bottom: 40px;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+  display: block;
+}
+.hero-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease forwards 1s;
+}
+.hero-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 300;
+  color: rgba(245,237,224,0.55);
+  max-width: 340px;
+  line-height: 1.5;
+}
+.hero-scroll {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(201,168,122,0.5);
+}
+.scroll-line {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--gold));
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0.3;transform:scaleY(0.7)} 50%{opacity:1;transform:scaleY(1)} }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sections */
+section { position: relative; }
+
+/* About */
+.about {
+  background: var(--milk);
+  color: var(--espresso);
+  padding: 140px 60px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;
+}
+.about-visual {
+  position: relative;
+}
+.about-frame {
+  width: 100%; aspect-ratio: 3/4;
+  border: 0.5px solid rgba(138,92,42,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.about-frame-inner {
+  position: absolute; inset: 12px;
+  background: var(--parchment);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.about-frame-deco {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 200px;
+  color: rgba(138,92,42,0.06);
+  line-height: 1;
+  user-select: none;
+}
+.about-corner {
+  position: absolute; width: 24px; height: 24px;
+  border-color: var(--caramel); border-style: solid;
+}
+.about-corner.tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.about-corner.tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+.about-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
+.about-corner.br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+.about-label {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--caramel); margin-bottom: 20px;
+}
+.about-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; font-weight: 400; line-height: 1.1;
+  color: var(--espresso); margin-bottom: 32px;
+}
+.about-heading em { font-style: italic; color: var(--caramel); }
+.about-body {
+  font-size: 15px; line-height: 1.9; color: rgba(26,13,5,0.65);
+  margin-bottom: 20px;
+}
+.about-stat-row {
+  display: flex; gap: 40px; margin-top: 48px;
+  padding-top: 40px; border-top: 0.5px solid rgba(138,92,42,0.2);
+}
+.about-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px; font-weight: 300; color: var(--caramel); line-height: 1;
+}
+.about-stat-label {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(26,13,5,0.4); margin-top: 6px;
+}
+
+/* Journey / User flow */
+.journey {
+  background: var(--dark-roast);
+  padding: 140px 60px;
+}
+.journey-header { text-align: center; margin-bottom: 100px; }
+.journey-label {
+  font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--gold); opacity: 0.6; margin-bottom: 16px;
+}
+.journey-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px; font-weight: 300; color: var(--cream); line-height: 1.1;
+}
+.journey-title em { font-style: italic; color: var(--gold); }
+.journey-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  position: relative;
+}
+.journey-steps::before {
+  content: '';
+  position: absolute; top: 36px; left: 10%; right: 10%; height: 0.5px;
+  background: linear-gradient(to right, transparent, var(--gold), var(--gold), transparent);
+  opacity: 0.3;
+}
+.journey-step {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 0 24px;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.journey-step.visible { opacity: 1; transform: translateY(0); }
+.step-num {
+  width: 72px; height: 72px;
+  border: 0.5px solid rgba(201,168,122,0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 300;
+  color: var(--gold);
+  background: var(--dark-roast);
+  position: relative; z-index: 1;
+  margin-bottom: 32px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.journey-step:hover .step-num {
+  background: rgba(201,168,122,0.1);
+  border-color: var(--gold);
+}
+.step-icon { font-size: 20px; margin-bottom: 8px; }
+.step-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 400; color: var(--cream);
+  margin-bottom: 12px;
+}
+.step-desc { font-size: 13px; line-height: 1.8; color: rgba(245,237,224,0.45); }
+.step-action {
+  margin-top: 20px;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); opacity: 0.7;
+  cursor: pointer; text-decoration: none;
+  transition: opacity 0.2s;
+}
+.step-action:hover { opacity: 1; }
+
+/* Reservation */
+.reservation {
+  background: var(--parchment);
+  color: var(--espresso);
+  padding: 140px 60px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start;
+}
+.res-left { position: sticky; top: 120px; }
+.res-label {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--caramel); margin-bottom: 20px;
+}
+.res-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; font-weight: 300; line-height: 1.1;
+  color: var(--espresso); margin-bottom: 28px;
+}
+.res-title em { font-style: italic; color: var(--caramel); }
+.res-note { font-size: 14px; line-height: 1.8; color: rgba(26,13,5,0.55); margin-bottom: 40px; }
+.res-hours { border-top: 0.5px solid rgba(138,92,42,0.25); padding-top: 32px; }
+.res-hour-row {
+  display: flex; justify-content: space-between;
+  padding: 9px 0; border-bottom: 0.5px solid rgba(138,92,42,0.1);
+  font-size: 13px;
+}
+.res-hour-day { color: rgba(26,13,5,0.5); text-transform: uppercase; letter-spacing: 1px; font-size: 11px; }
+.res-hour-time { color: var(--caramel); }
+.res-hour-row.today .res-hour-day { color: var(--espresso); font-weight: 400; }
+.res-hour-row.today .res-hour-time { color: var(--espresso); }
+.res-closed { color: rgba(26,13,5,0.25); }
+
+.res-form-wrap { padding-top: 8px; }
+.res-form { display: grid; gap: 20px; }
+.field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field-lbl {
+  font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(26,13,5,0.45);
+}
+.field-inp {
+  background: transparent;
+  border: none; border-bottom: 0.5px solid rgba(138,92,42,0.35);
+  padding: 10px 0; font-family: 'Jost', sans-serif;
+  font-size: 15px; font-weight: 300; color: var(--espresso);
+  outline: none; width: 100%;
+  transition: border-color 0.3s;
+}
+.field-inp:focus { border-color: var(--caramel); }
+.field-inp::placeholder { color: rgba(26,13,5,0.2); }
+select.field-inp { appearance: none; cursor: pointer; background: transparent; }
+option { background: var(--parchment); color: var(--espresso); }
+.field-inp.textarea { border: 0.5px solid rgba(138,92,42,0.25); padding: 12px 16px; resize: none; min-height: 80px; font-family: 'Jost', sans-serif; border-radius: 2px; }
+.field-inp.textarea:focus { border-color: var(--caramel); }
+.res-btn {
+  background: var(--espresso); color: var(--gold);
+  border: none; padding: 18px 40px;
+  font-family: 'Jost', sans-serif; font-weight: 300;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  cursor: pointer; width: 100%; margin-top: 8px;
+  transition: background 0.3s;
+  position: relative; overflow: hidden;
+}
+.res-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--mahogany);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+.res-btn:hover::after { transform: translateX(0); }
+.res-btn span { position: relative; z-index: 1; }
+.res-success {
+  display: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 22px;
+  color: var(--caramel); line-height: 1.6; padding: 32px 0;
+  border-top: 0.5px solid rgba(138,92,42,0.2);
+  border-bottom: 0.5px solid rgba(138,92,42,0.2);
+}
+
+/* Reviews */
+.reviews-section {
+  background: var(--espresso);
+  padding: 140px 60px;
+}
+.reviews-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 80px;
+}
+.reviews-label {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); opacity: 0.6; margin-bottom: 16px;
+}
+.reviews-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; font-weight: 300; color: var(--cream); line-height: 1.1;
+}
+.reviews-title em { font-style: italic; color: var(--gold); }
+.rating-display { text-align: right; }
+.rating-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 72px; font-weight: 300; color: var(--gold); line-height: 1;
+}
+.rating-stars { color: var(--gold); font-size: 16px; letter-spacing: 3px; margin: 6px 0; }
+.rating-count { font-size: 11px; letter-spacing: 2px; color: rgba(245,237,224,0.3); }
+.reviews-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: rgba(201,168,122,0.1);
+  margin-bottom: 80px;
+}
+.review-card {
+  background: var(--espresso); padding: 40px 36px;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s;
+}
+.review-card.visible { opacity: 1; transform: translateY(0); }
+.review-card:hover { background: rgba(44,26,14,0.6); }
+.review-card-stars { color: var(--gold); font-size: 12px; letter-spacing: 2px; margin-bottom: 20px; }
+.review-card-text {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 17px; line-height: 1.7; color: rgba(245,237,224,0.7);
+  margin-bottom: 24px;
+}
+.review-card-author {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(201,168,122,0.4);
+}
+
+/* Write review */
+.write-review {
+  border-top: 0.5px solid rgba(201,168,122,0.1);
+  padding-top: 80px;
+}
+.wr-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 300; color: var(--cream);
+  margin-bottom: 40px;
+}
+.wr-title em { font-style: italic; color: var(--gold); }
+.star-picker { display: flex; gap: 8px; margin-bottom: 32px; }
+.star-btn {
+  font-size: 28px; cursor: pointer; color: rgba(201,168,122,0.25);
+  background: none; border: none; padding: 0; line-height: 1;
+  transition: color 0.2s, transform 0.2s;
+}
+.star-btn:hover, .star-btn.lit { color: var(--gold); }
+.star-btn:hover { transform: scale(1.2); }
+.wr-form { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.wr-form .span2 { grid-column: 1 / -1; }
+.wr-inp {
+  background: transparent; border: none;
+  border-bottom: 0.5px solid rgba(201,168,122,0.2);
+  padding: 10px 0; font-family: 'Jost', sans-serif;
+  font-size: 15px; font-weight: 300; color: var(--cream);
+  outline: none; width: 100%; transition: border-color 0.3s;
+}
+.wr-inp:focus { border-color: var(--gold); }
+.wr-inp::placeholder { color: rgba(245,237,224,0.2); }
+.wr-textarea {
+  background: rgba(201,168,122,0.03);
+  border: 0.5px solid rgba(201,168,122,0.15);
+  padding: 16px; font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 16px; color: var(--cream);
+  outline: none; width: 100%; resize: none; min-height: 100px;
+  transition: border-color 0.3s;
+}
+.wr-textarea:focus { border-color: var(--gold); }
+.wr-textarea::placeholder { color: rgba(245,237,224,0.2); }
+.wr-btn {
+  background: transparent; color: var(--gold);
+  border: 0.5px solid rgba(201,168,122,0.4);
+  padding: 16px 40px; font-family: 'Jost', sans-serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  cursor: pointer; transition: background 0.3s, border-color 0.3s;
+}
+.wr-btn:hover { background: rgba(201,168,122,0.08); border-color: var(--gold); }
+.wr-success {
+  display: none; font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 20px; color: var(--gold); margin-top: 8px;
+}
+
+/* Map / Find us */
+.find-us {
+  background: var(--mahogany); padding: 140px 60px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.find-label {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(201,168,122,0.5); margin-bottom: 20px;
+}
+.find-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; font-weight: 300; color: var(--cream); line-height: 1.1;
+  margin-bottom: 48px;
+}
+.find-title em { font-style: italic; color: var(--gold); }
+.contact-row {
+  display: flex; gap: 16px; align-items: flex-start;
+  margin-bottom: 24px;
+}
+.contact-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border: 0.5px solid rgba(201,168,122,0.2);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.contact-lbl { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(201,168,122,0.4); margin-bottom: 4px; }
+.contact-val { font-size: 14px; color: var(--cream); }
+.contact-val a { color: var(--gold); text-decoration: none; }
+.map-box {
+  aspect-ratio: 4/3; background: rgba(26,13,5,0.5);
+  border: 0.5px solid rgba(201,168,122,0.1);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.map-pin-wrap { text-align: center; }
+.map-pin {
+  width: 48px; height: 48px; margin: 0 auto 16px;
+  border: 1px solid rgba(201,168,122,0.4); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  animation: ping 2s ease-in-out infinite;
+}
+@keyframes ping { 0%,100%{box-shadow:0 0 0 0 rgba(201,168,122,0.3)} 50%{box-shadow:0 0 0 16px rgba(201,168,122,0)} }
+.map-address { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: rgba(201,168,122,0.6); }
+.map-link {
+  margin-top: 20px; display: inline-block;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); text-decoration: none;
+  border-bottom: 0.5px solid rgba(201,168,122,0.3);
+  padding-bottom: 2px; transition: border-color 0.2s;
+}
+.map-link:hover { border-color: var(--gold); }
+
+/* Footer */
+footer {
+  background: var(--espresso); padding: 60px;
+  border-top: 0.5px solid rgba(201,168,122,0.08);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 300; color: var(--gold); letter-spacing: 4px;
+}
+.footer-copy { font-size: 11px; color: rgba(201,168,122,0.25); letter-spacing: 1px; }
+.footer-links { display: flex; gap: 32px; }
+.footer-links a {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(245,237,224,0.3); text-decoration: none; transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* Parallax overlay */
+.section-divider {
+  height: 1px; background: linear-gradient(to right, transparent, rgba(201,168,122,0.2), transparent);
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+
+<nav id="nav">
+  <a class="nav-brand" href="#">Kaffeehaus</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#journey">Visit</a></li>
+    <li><a href="#reservation">Reserve</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#find">Find us</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-lines">
+    <div class="hero-line"></div>
+    <div class="hero-line"></div>
+    <div class="hero-line"></div>
+    <div class="hero-line"></div>
+  </div>
+  <div class="hero-eyebrow">Eberstadt &nbsp;·&nbsp; Darmstadt &nbsp;·&nbsp; Since forever</div>
+  <div class="hero-title">Kaffe<em>haus</em></div>
+  <div class="hero-bottom">
+    <div class="hero-tagline">Where the forest walk ends and the coffee begins.</div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      scroll
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="about-visual reveal">
+    <div class="about-frame">
+      <div class="about-corner tl"></div>
+      <div class="about-corner tr"></div>
+      <div class="about-corner bl"></div>
+      <div class="about-corner br"></div>
+      <div class="about-frame-inner">
+        <div class="about-frame-deco">K</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="about-label reveal reveal-delay-1">Our story</div>
+    <div class="about-heading reveal reveal-delay-2">A warm corner<br>in <em>Eberstadt</em></div>
+    <div class="about-body reveal reveal-delay-3">
+      Tucked along Heidelberger Landstraße at the edge of the forest, Kaffeehaus is the kind of place you discover by chance — and return to by choice. Vintage paintings hang on every wall, artwork traces the ceiling, and the light always feels golden in the afternoon.
+    </div>
+    <div class="about-body reveal reveal-delay-4">
+      Whether you come for breakfast, a quiet flammkuchen, or a late evening drink, you'll find the same unhurried pace. The kind of place that doesn't rush you.
+    </div>
+    <div class="about-stat-row reveal">
+      <div>
+        <div class="about-stat-num">4.3</div>
+        <div class="about-stat-label">Google rating</div>
+      </div>
+      <div>
+        <div class="about-stat-num">557</div>
+        <div class="about-stat-label">Guest reviews</div>
+      </div>
+      <div>
+        <div class="about-stat-num">€10–20</div>
+        <div class="about-stat-label">Per person</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Journey -->
+<section class="journey" id="journey">
+  <div class="journey-header">
+    <div class="journey-label reveal">Your visit, step by step</div>
+    <div class="journey-title reveal reveal-delay-2">How a <em>perfect evening</em><br>at Kaffeehaus unfolds</div>
+  </div>
+  <div class="journey-steps">
+    <div class="journey-step" style="transition-delay:0s">
+      <div class="step-num">01</div>
+      <div class="step-title">Discover</div>
+      <div class="step-desc">Browse our menu and opening hours. Find us at the edge of Eberstadt, minutes from the forest trail.</div>
+      <a class="step-action" href="https://kaffeehaus-eberstadt.de" target="_blank">View menu →</a>
+    </div>
+    <div class="journey-step" style="transition-delay:0.15s">
+      <div class="step-num">02</div>
+      <div class="step-title">Reserve</div>
+      <div class="step-desc">Book your table in advance, especially on weekends. We'll confirm by phone within the hour.</div>
+      <a class="step-action" href="#reservation">Reserve now →</a>
+    </div>
+    <div class="journey-step" style="transition-delay:0.3s">
+      <div class="step-num">03</div>
+      <div class="step-title">Arrive</div>
+      <div class="step-desc">Find us at Heidelberger Landstraße 269. Street parking is available. A warm welcome awaits.</div>
+      <a class="step-action" href="https://maps.google.com/?q=Heidelberger+Landstra%C3%9Fe+269+64297+Darmstadt" target="_blank">Get directions →</a>
+    </div>
+    <div class="journey-step" style="transition-delay:0.45s">
+      <div class="step-num">04</div>
+      <div class="step-title">Share</div>
+      <div class="step-desc">Loved your visit? Leave a review and tell others. Your words help fellow guests discover us.</div>
+      <a class="step-action" href="#reviews">Write a review →</a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Reservation -->
+<section class="reservation" id="reservation">
+  <div class="res-left">
+    <div class="res-label reveal">Book a table</div>
+    <div class="res-title reveal reveal-delay-1">Reserve your<br><em>evening</em></div>
+    <div class="res-note reveal reveal-delay-2">We'd love to have you. Fill in your details and we'll confirm by phone. For same-day bookings, calling us directly is fastest.</div>
+    <div class="res-hours reveal reveal-delay-3">
+      <div class="res-hour-row"><span class="res-hour-day">Monday</span><span class="res-closed res-hour-time">Closed</span></div>
+      <div class="res-hour-row"><span class="res-hour-day">Tuesday</span><span class="res-hour-time">9:00 – 21:30</span></div>
+      <div class="res-hour-row"><span class="res-hour-day">Wednesday</span><span class="res-hour-time">9:00 – 21:30</span></div>
+      <div class="res-hour-row today"><span class="res-hour-day">Thursday</span><span class="res-hour-time">9:00 – 21:30</span></div>
+      <div class="res-hour-row"><span class="res-hour-day">Friday</span><span class="res-hour-time">9:00 – 21:30</span></div>
+      <div class="res-hour-row"><span class="res-hour-day">Saturday</span><span class="res-hour-time">9:00 – 21:30</span></div>
+      <div class="res-hour-row"><span class="res-hour-day">Sunday</span><span class="res-hour-time">10:00 – 20:00</span></div>
+    </div>
+  </div>
+
+  <div class="res-form-wrap reveal reveal-delay-2">
+    <div class="res-form" id="resForm">
+      <div class="field-group">
+        <div class="field">
+          <label class="field-lbl">Name</label>
+          <input class="field-inp" id="rName" type="text" placeholder="Your full name">
+        </div>
+        <div class="field">
+          <label class="field-lbl">Phone</label>
+          <input class="field-inp" id="rPhone" type="tel" placeholder="+49 …">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field">
+          <label class="field-lbl">Date</label>
+          <input class="field-inp" id="rDate" type="date">
+        </div>
+        <div class="field">
+          <label class="field-lbl">Time</label>
+          <select class="field-inp" id="rTime">
+            <option value="">Select time</option>
+            <option>9:00</option><option>9:30</option><option>10:00</option>
+            <option>10:30</option><option>11:00</option><option>12:00</option>
+            <option>13:00</option><option>14:00</option><option>15:00</option>
+            <option>17:00</option><option>18:00</option><option>19:00</option>
+            <option>20:00</option><option>21:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field">
+          <label class="field-lbl">Guests</label>
+          <select class="field-inp" id="rGuests">
+            <option>1 guest</option><option>2 guests</option><option>3 guests</option>
+            <option>4 guests</option><option>5 guests</option><option>6+ guests</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Email (optional)</label>
+          <input class="field-inp" id="rEmail" type="email" placeholder="For confirmation">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-lbl">Special requests</label>
+        <textarea class="field-inp textarea" id="rNote" rows="3" placeholder="Allergies, birthday, seating preferences…"></textarea>
+      </div>
+      <div>
+        <button class="res-btn" onclick="submitRes()"><span>Request reservation</span></button>
+      </div>
+    </div>
+    <div class="res-success" id="resSuccess"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Reviews -->
+<section class="reviews-section" id="reviews">
+  <div class="reviews-header">
+    <div>
+      <div class="reviews-label reveal">Guest experiences</div>
+      <div class="reviews-title reveal reveal-delay-2">What people<br>are <em>saying</em></div>
+    </div>
+    <div class="rating-display reveal">
+      <div class="rating-big">4.3</div>
+      <div class="rating-stars">★★★★☆</div>
+      <div class="rating-count">557 Google reviews</div>
+    </div>
+  </div>
+
+  <div class="reviews-grid" id="reviewsGrid">
+    <div class="review-card">
+      <div class="review-card-stars">★★★★★</div>
+      <div class="review-card-text">"Cosy nook with excellent service, great coffees, lovely food. Next time we'll be sure to leave space for the vegan cake."</div>
+      <div class="review-card-author">Google review</div>
+    </div>
+    <div class="review-card">
+      <div class="review-card-stars">★★★★★</div>
+      <div class="review-card-text">"Romantic vibe and good coffee — perfect for a date. The waiter is nice and speaks good English."</div>
+      <div class="review-card-author">Google review</div>
+    </div>
+    <div class="review-card">
+      <div class="review-card-stars">★★★★☆</div>
+      <div class="review-card-text">"Traditional European charm with a rustic, beautifully designed interior. We combined it with a scenic hike from Darmstadt."</div>
+      <div class="review-card-author">Google review</div>
+    </div>
+  </div>
+
+  <!-- Write review -->
+  <div class="write-review">
+    <div class="wr-title reveal">Leave your own <em>review</em></div>
+    <div class="star-picker" id="starPicker">
+      <button class="star-btn" data-v="1" onclick="setStars(1)">★</button>
+      <button class="star-btn" data-v="2" onclick="setStars(2)">★</button>
+      <button class="star-btn" data-v="3" onclick="setStars(3)">★</button>
+      <button class="star-btn" data-v="4" onclick="setStars(4)">★</button>
+      <button class="star-btn" data-v="5" onclick="setStars(5)">★</button>
+    </div>
+    <div class="wr-form" id="wrForm">
+      <div class="span2">
+        <textarea class="wr-textarea" id="wrText" rows="3" placeholder="Tell us about your visit…"></textarea>
+      </div>
+      <div>
+        <input class="wr-inp" id="wrName" type="text" placeholder="Your name">
+      </div>
+      <div>
+        <input class="wr-inp" id="wrWhen" type="month" placeholder="When did you visit?">
+      </div>
+      <div class="span2">
+        <button class="wr-btn" onclick="submitReview()">Submit review</button>
+        <div class="wr-success" id="wrSuccess">Thank you — your review has been added.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Find us -->
+<section class="find-us" id="find">
+  <div>
+    <div class="find-label reveal">Find us</div>
+    <div class="find-title reveal reveal-delay-1">Come <em>visit</em><br>Eberstadt</div>
+    <div class="contact-row reveal reveal-delay-2">
+      <div class="contact-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="6" r="3.5" stroke="rgba(201,168,122,0.6)" stroke-width="0.8"/>
+          <path d="M7 9.5 C7 9.5 2.5 13 2.5 13" stroke="rgba(201,168,122,0.3)" stroke-width="0.5"/>
+          <path d="M7 9.5 C7 9.5 11.5 13 11.5 13" stroke="rgba(201,168,122,0.3)" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-lbl">Address</div>
+        <div class="contact-val">Heidelberger Landstraße 269, 64297 Darmstadt</div>
+      </div>
+    </div>
+    <div class="contact-row reveal reveal-delay-3">
+      <div class="contact-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <rect x="2" y="1.5" width="10" height="11" rx="1" stroke="rgba(201,168,122,0.6)" stroke-width="0.8"/>
+          <path d="M4.5 5.5h5M4.5 7.5h3.5" stroke="rgba(201,168,122,0.4)" stroke-width="0.7"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-lbl">Phone</div>
+        <div class="contact-val"><a href="tel:+4961517870826">06151 7870826</a></div>
+      </div>
+    </div>
+    <div class="contact-row reveal reveal-delay-4">
+      <div class="contact-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="5.5" stroke="rgba(201,168,122,0.6)" stroke-width="0.8"/>
+          <path d="M7 3.5v3.5l2 2" stroke="rgba(201,168,122,0.4)" stroke-width="0.7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-lbl">Website</div>
+        <div class="contact-val"><a href="https://kaffeehaus-eberstadt.de" target="_blank">kaffeehaus-eberstadt.de</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal reveal-delay-2">
+    <div class="map-box">
+      <div class="map-pin-wrap">
+        <div class="map-pin">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="3" fill="rgba(201,168,122,0.8)"/>
+          </svg>
+        </div>
+        <div class="map-address">Heidelberger Landstraße 269<br>64297 Darmstadt</div>
+        <a class="map-link" href="https://maps.google.com/?q=Heidelberger+Landstra%C3%9Fe+269+64297+Darmstadt" target="_blank">Open in Google Maps ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">Kaffeehaus</div>
+  <div class="footer-links">
+    <a href="https://kaffeehaus-eberstadt.de" target="_blank">Menu</a>
+    <a href="tel:+4961517870826">Call</a>
+    <a href="#reservation">Reserve</a>
+    <a href="#top">Back to top</a>
+  </div>
+  <div class="footer-copy">Heidelberger Landstraße 269 &nbsp;·&nbsp; 64297 Darmstadt</div>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('curRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  curRing.style.left = rx + 'px'; curRing.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+document.querySelectorAll('a,button,input,select,textarea').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width='4px'; cur.style.height='4px'; curRing.style.width='48px'; curRing.style.height='48px'; });
+  el.addEventListener('mouseleave', () => { cur.style.width='8px'; cur.style.height='8px'; curRing.style.width='32px'; curRing.style.height='32px'; });
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Scroll reveal
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .review-card, .journey-step').forEach(el => revealObs.observe(el));
+
+// Stars
+let selectedStars = 0;
+function setStars(n) {
+  selectedStars = n;
+  document.querySelectorAll('.star-btn').forEach(b => {
+    b.classList.toggle('lit', parseInt(b.dataset.v) <= n);
+  });
+}
+
+// Reservation
+function submitRes() {
+  const name = document.getElementById('rName').value.trim();
+  const date = document.getElementById('rDate').value;
+  const time = document.getElementById('rTime').value;
+  if (!name || !date || !time) { alert('Please fill in your name, date, and preferred time.'); return; }
+  document.getElementById('resForm').style.display = 'none';
+  const s = document.getElementById('resSuccess');
+  s.style.display = 'block';
+  s.innerHTML = 'Thank you, ' + name + '. We\'ve received your request for ' + date + ' at ' + time + '. We\'ll call to confirm shortly.';
+}
+
+// Write review
+function submitReview() {
+  const text = document.getElementById('wrText').value.trim();
+  const name = document.getElementById('wrName').value.trim() || 'A guest';
+  if (!text) { alert('Please share something about your visit.'); return; }
+  if (!selectedStars) { alert('Please choose a star rating.'); return; }
+  const stars = '★'.repeat(selectedStars) + '☆'.repeat(5 - selectedStars);
+  const grid = document.getElementById('reviewsGrid');
+  const card = document.createElement('div');
+  card.className = 'review-card';
+  card.style.borderTop = '1px solid rgba(201,168,122,0.3)';
+  card.innerHTML = '<div class="review-card-stars">' + stars + '</div><div class="review-card-text">"' + text + '"</div><div class="review-card-author">' + name + ' &nbsp;·&nbsp; just now</div>';
+  grid.prepend(card);
+  setTimeout(() => card.classList.add('visible'), 50);
+  document.getElementById('wrForm').style.opacity = '0.35';
+  document.getElementById('wrForm').style.pointerEvents = 'none';
+  document.getElementById('wrSuccess').style.display = 'block';
+}
+</script>
+</body>
+</html>
