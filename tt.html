@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong World | Tischtennis-Spezialist in Darmstadt</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;0,800;1,400;1,800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ── TABLE TENNIS DESIGN SYSTEM ── */
+        :root {
+            --bg-light: #F8F9FA;         /* Clean Sports Arena Grey */
+            --bg-white: #FFFFFF;
+            --text-dark: #111418;        /* Carbon Black */
+            --text-muted: #6C757D;       
+            
+            /* The Ping Pong Palette */
+            --rubber-red: #E63946;       /* Forehand Rubber Red */
+            --rubber-black: #212529;     /* Backhand Rubber Black */
+            --court-blue: #0A58CA;       /* Classic Table Blue */
+            --court-line: #FFFFFF;       /* White Table Edge */
+            --ball-orange: #FF7A00;      /* Ping Pong Ball Orange */
+            
+            --font-sport: 'Kanit', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --skew-angle: -4deg;
+        }
+
+        /* Reset & Global Base */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom ball */
+            line-height: 1.6;
+        }
+
+        /* ── CUSTOM PING PONG BALL CURSOR ── */
+        .cursor-ball {
+            position: fixed; width: 18px; height: 18px;
+            background: radial-gradient(circle at 30% 30%, #FFA755, var(--ball-orange));
+            border-radius: 50%;
+            pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: -3px 5px 8px rgba(0,0,0,0.3);
+            transition: transform 0.1s ease-out, width 0.2s, height 0.2s;
+        }
+        
+        /* ── LANGUAGE LOGIC ── */
+        [lang="en"] .de { display: none !important; }
+        [lang="de"] .en { display: none !important; }
+
+        /* ── STICKY NAV ── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid var(--rubber-red);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        nav.scrolled { padding: 12px 5%; }
+        
+        .brand {
+            font-family: var(--font-sport);
+            font-size: 2rem; font-weight: 800; font-style: italic;
+            color: var(--text-dark); text-decoration: none;
+            text-transform: uppercase; letter-spacing: -0.5px;
+        }
+        .brand span { color: var(--court-blue); }
+        
+        .nav-right { display: flex; align-items: center; gap: 40px; }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a {
+            font-family: var(--font-sport); font-size: 1.1rem; text-transform: uppercase;
+            font-weight: 600; color: var(--text-dark); text-decoration: none; transition: var(--transition);
+        }
+        .nav-links a:hover { color: var(--rubber-red); }
+
+        .lang-switch { display: flex; background: var(--bg-light); border-radius: 4px; border: 1px solid #ddd; overflow: hidden; }
+        .lang-btn {
+            background: transparent; border: none; padding: 6px 16px;
+            font-family: var(--font-sport); font-size: 1rem; font-weight: 600;
+            color: var(--text-muted); cursor: pointer; transition: var(--transition);
+        }
+        .lang-btn.active { background: var(--rubber-red); color: white; }
+
+        /* ── SPORT BUTTONS ── */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 32px;
+            background: var(--court-blue); color: white;
+            font-family: var(--font-sport); font-size: 1.1rem; text-transform: uppercase; font-weight: 600; font-style: italic;
+            text-decoration: none; border-radius: 0px; transform: skewX(var(--skew-angle));
+            box-shadow: 4px 4px 0px var(--text-dark);
+            transition: var(--transition); border: none; cursor: pointer;
+        }
+        .btn span { transform: skewX(calc(var(--skew-angle) * -1)); display: flex; align-items: center; gap: 8px; }
+        .btn:hover { background: var(--rubber-red); transform: skewX(var(--skew-angle)) translateY(-2px); box-shadow: 6px 6px 0px var(--text-dark); }
+        .btn-full { width: 100%; margin-top: 15px; }
+
+        /* ── THE NET DIVIDER ── */
+        .net-divider {
+            height: 24px; width: 100%;
+            background: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,255,0.4) 4px, rgba(255,255,255,0.4) 6px),
+                        repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(255,255,255,0.4) 4px, rgba(255,255,255,0.4) 6px);
+            background-color: var(--court-blue);
+            border-top: 5px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative; z-index: 10;
+        }
+
+        /* ── SECTION COMMON ── */
+        section { padding: 100px 5%; position: relative; }
+        .section-header { margin-bottom: 50px; text-transform: uppercase; }
+        .eyebrow {
+            font-family: var(--font-sport); font-size: 1.2rem; font-weight: 800;
+            color: var(--rubber-red); margin-bottom: 5px; display: block;
+        }
+        .section-title {
+            font-family: var(--font-sport); font-size: 3.8rem; font-weight: 800; font-style: italic;
+            line-height: 1; color: var(--text-dark); text-transform: uppercase;
+        }
+
+        /* ── DIVISION 1: HERO & TABLE PICTURE ── */
+        .hero {
+            padding-top: 120px; padding-bottom: 80px;
+            background: linear-gradient(135deg, #111418 0%, #212529 100%);
+            color: white; position: relative; overflow: hidden;
+        }
+        .hero::after {
+            content: ''; position: absolute; right: 0; bottom: 0; width: 50%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1609710228159-0fa9bd8c0827?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80') center/cover;
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0));
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0));
+            opacity: 0.8;
+        }
+        .hero-container {
+            display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px;
+            max-width: 1400px; margin: 0 auto; width: 100%; position: relative; z-index: 2;
+        }
+        .hero h1 {
+            font-family: var(--font-sport); font-size: clamp(4rem, 7vw, 6rem);
+            line-height: 0.9; font-weight: 800; font-style: italic; text-transform: uppercase;
+            margin-bottom: 20px; text-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+        }
+        .hero h1 span { color: var(--rubber-red); }
+        .hero p { font-size: 1.25rem; color: #ced4da; max-width: 500px; margin-bottom: 30px; font-weight: 300; }
+        
+        .trust-badges { display: flex; gap: 20px; margin-bottom: 40px; font-family: var(--font-sport); font-size: 1.1rem; font-weight: 600; text-transform: uppercase; }
+        .trust-badges i { color: var(--ball-orange); margin-right: 5px; }
+
+        /* Form Card */
+        .interactive-card {
+            background: white; color: var(--text-dark);
+            padding: 40px; border-radius: 0px;
+            border-top: 8px solid var(--court-blue);
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.3);
+        }
+        .interactive-card h3 { font-family: var(--font-sport); font-size: 2.2rem; text-transform: uppercase; font-weight: 800; font-style: italic; margin-bottom: 5px; }
+        .interactive-card p { font-size: 1rem; margin-bottom: 24px; color: var(--text-muted); }
+        
+        .res-input {
+            width: 100%; background: #F1F3F5; border: 2px solid #E9ECEF;
+            padding: 14px 18px; margin-bottom: 16px;
+            font-family: var(--font-body); font-size: 1rem; color: var(--text-dark); font-weight: 600; transition: var(--transition);
+        }
+        .res-input:focus { outline: none; border-color: var(--court-blue); background: white; }
+
+        /* ── DIVISION 2: ABOUT / EXPERTISE ── */
+        .about-split { background: var(--bg-white); }
+        .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1400px; margin: 0 auto; }
+        
+        .img-wrapper { position: relative; border: 4px solid var(--text-dark); padding: 10px; background: white; transform: rotate(-2deg); }
+        /* Bulletproofed Image CSS to ensure it never collapses */
+        .img-wrapper img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; border: 2px solid var(--text-dark); background-color: #eee; }
+        
+        .about-text p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 400; }
+
+        /* ── DIVISION 3: EQUIPMENT (RUBBER CARDS) ── */
+        .prod-journey-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; max-width: 1400px; margin: 0 auto; }
+        
+        /* Rubber Pimple Texture Cards */
+        .glass-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .rubber-card {
+            padding: 40px 30px; border-radius: 8px; color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); transition: var(--transition);
+            display: flex; flex-direction: column; justify-content: space-between;
+            min-height: 280px;
+        }
+        .rubber-card:hover { transform: translateY(-8px); }
+        
+        /* Forehand Red Texture */
+        .card-red {
+            background-color: var(--rubber-red);
+            background-image: radial-gradient(circle, rgba(0,0,0,0.15) 2px, transparent 2px);
+            background-size: 10px 10px; border: 3px solid #B71C1C;
+        }
+        /* Backhand Black Texture */
+        .card-black {
+            background-color: var(--rubber-black);
+            background-image: radial-gradient(circle, rgba(255,255,255,0.08) 2px, transparent 2px);
+            background-size: 10px 10px; border: 3px solid #000;
+        }
+        .rubber-card h3 { font-family: var(--font-sport); font-size: 2rem; font-style: italic; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; text-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
+        .rubber-card p { font-weight: 600; font-size: 1rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+
+        /* Process Steps */
+        .vertical-timeline { display: flex; flex-direction: column; gap: 30px; }
+        .timeline-step { display: flex; gap: 20px; }
+        .step-number {
+            font-family: var(--font-sport); font-size: 3rem; font-style: italic; font-weight: 800;
+            color: var(--court-blue); line-height: 0.8; opacity: 0.3;
+        }
+        .timeline-step h4 { font-family: var(--font-sport); font-size: 1.5rem; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
+
+        /* ── DIVISION 4: SCOREBOARD TIMINGS ── */
+        .timing-reservation { background: #E9ECEF; }
+        .scoreboard {
+            background: #111; color: white; padding: 30px; border-radius: 8px;
+            border: 4px solid #333; font-family: 'Courier New', Courier, monospace;
+        }
+        .score-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #333; font-size: 1.1rem; font-weight: bold; color: #0f0; }
+        .score-row.today { color: var(--ball-orange); background: rgba(255, 122, 0, 0.1); padding: 12px 10px; }
+        .score-row.closed { color: #f00; }
+        .score-day { text-transform: uppercase; }
+
+        /* ── DIVISION 5: PLAYER REVIEWS ── */
+        .reviews-section { background: var(--bg-white); }
+        .compact-reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .compact-review-card { 
+            background: var(--bg-light); padding: 30px; border-left: 6px solid var(--rubber-red); 
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
+        }
+        .review-stars { color: var(--ball-orange); font-size: 1.1rem; margin-bottom: 10px; }
+        .review-text { font-family: var(--font-body); font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; color: var(--text-dark); }
+        .review-author { font-family: var(--font-sport); font-size: 1rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; }
+
+        /* ── DIVISION 6: COURT FOOTER ── */
+        footer {
+            background: var(--court-blue); color: white; padding: 80px 5% 40px;
+            display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 60px;
+            position: relative;
+        }
+        footer .brand { color: white; }
+        footer h4 { font-family: var(--font-sport); font-size: 1.2rem; text-transform: uppercase; color: var(--ball-orange); margin-bottom: 20px; font-weight: 800; }
+        footer p, footer a { color: #E9ECEF; font-size: 1rem; text-decoration: none; line-height: 2; font-weight: 500; }
+        footer a:hover { color: white; text-decoration: underline; }
+        .map-action-link { display: inline-block; margin-top: 20px; font-family: var(--font-sport); font-size: 1.6rem; font-style: italic; color: white; text-transform: uppercase; border-bottom: 3px solid var(--rubber-red); }
+        .footer-bottom { grid-column: 1 / -1; text-align: center; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.9rem; font-weight: 300; }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.15s; }
+
+        @media (max-width: 992px) {
+            .nav-right { display: none; }
+            .hero-container, .split-grid, .prod-journey-grid, .timing-reservation, footer { grid-template-columns: 1fr; gap: 40px; }
+            .hero::after { width: 100%; mask-image: linear-gradient(to top, rgba(0,0,0,1) 20%, rgba(0,0,0,0)); }
+            .glass-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-ball" id="pingPongBall"></div>
+
+    <nav id="navbar">
+        <a href="#" class="brand">Ping Pong <span>World</span></a>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#about" class="de">Ausrüstung</a><a href="#about" class="en">Equipment</a></li>
+                <li><a href="#products" class="de">Service</a><a href="#products" class="en">Service</a></li>
+                <li><a href="#contact" class="de">Kontakt</a><a href="#contact" class="en">Contact</a></li>
+            </ul>
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="switchLanguage('de')">DE</button>
+                <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-container">
+            <div class="hero-content reveal">
+                <div class="trust-badges">
+                    <div><i class="fas fa-star"></i> 4.9 <span class="de">Bewertung</span><span class="en">Rating</span></div>
+                    <div><i class="fas fa-table-tennis"></i> <span class="de">Darmstadts Nr. 1</span><span class="en">Darmstadt's #1</span></div>
+                </div>
+                <h1 class="de">Spin. Speed. <br><span>Control.</span></h1>
+                <h1 class="en">Spin. Speed. <br><span>Control.</span></h1>
+                <p class="de">Profi-Tischtennisausrüstung in Darmstadt. Wir kleben, beraten und statten Vereine sowie Hobbyspieler mit Top-Marken aus.</p>
+                <p class="en">Professional table tennis equipment in Darmstadt. We assemble, advise, and supply clubs and hobby players with top brands.</p>
+            </div>
+
+            <div class="hero-form reveal delay-1">
+                <div class="interactive-card">
+                    <h3 class="de">Schläger-Setup Planen</h3>
+                    <h3 class="en">Plan your Setup</h3>
+                    <p class="de">Vereinbaren Sie eine individuelle Materialberatung.</p>
+                    <p class="en">Schedule an individual equipment consultation.</p>
+                    
+                    <form onsubmit="event.preventDefault(); alert('Anfrage gesendet! / Request sent!');">
+                        <input type="text" class="res-input" placeholder="Name" required>
+                        <select class="res-input" required>
+                            <option value="" class="de">Spielertyp wählen...</option>
+                            <option value="" class="en">Select Player Type...</option>
+                            <option value="off" class="de">Offensiv (Angriff)</option>
+                            <option value="off" class="en">Offensive (Attack)</option>
+                            <option value="all" class="de">Allround (Kontrolle)</option>
+                            <option value="all" class="en">Allround (Control)</option>
+                            <option value="def" class="de">Defensiv (Abwehr)</option>
+                            <option value="def" class="en">Defensive (Defense)</option>
+                        </select>
+                        <input type="tel" class="res-input" placeholder="Telefon / Phone" required>
+                        <button type="submit" class="btn btn-full"><span><span class="de">Termin Anfragen</span><span class="en">Request Appointment</span> <i class="fas fa-bolt"></i></span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="net-divider"></div>
+
+    <section id="about" class="about-split">
+        <div class="split-grid">
+            <div class="img-wrapper reveal">
+                <img src="https://images.unsplash.com/photo-1534158914592-062992fbe900?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                     alt="Ping Pong Paddle"
+                     onerror="this.onerror=null; this.src='https://images.pexels.com/photos/3820286/pexels-photo-3820286.jpeg?auto=compress&cs=tinysrgb&w=1000';">
+            </div>
+            <div class="about-text reveal delay-1">
+                <span class="eyebrow de">EXPERTISE SEIT JAHREN</span>
+                <span class="eyebrow en">YEARS OF EXPERTISE</span>
+                <h2 class="section-title de">Das perfekte <em>Material.</em></h2>
+                <h2 class="section-title en">The perfect <em>material.</em></h2>
+                <p class="de">Der Unterschied zwischen einem guten und einem fantastischen Spiel liegt im Detail. Bei Ping Pong World finden wir exakt die Kombination aus Holz und Belag, die Ihren individuellen Spielstil unterstützt.</p>
+                <p class="en">The difference between a good and a fantastic game lies in the details. At Ping Pong World, we find the exact combination of blade and rubber that supports your individual playstyle.</p>
+                
+                <div class="trust-badges" style="margin-top: 30px; color: var(--text-dark);">
+                    <div><i class="fas fa-check" style="color: var(--rubber-red);"></i> <span class="de">Kostenlose Montage</span><span class="en">Free Assembly</span></div>
+                    <div><i class="fas fa-check" style="color: var(--rubber-red);"></i> <span class="de">Top Marken</span><span class="en">Top Brands</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products">
+        <div class="section-header reveal">
+            <span class="eyebrow de">PROFI SORTIMENT</span>
+            <span class="eyebrow en">PRO ASSORTMENT</span>
+            <h2 class="section-title de">Hölzer & <em>Beläge</em></h2>
+            <h2 class="section-title en">Blades & <em>Rubbers</em></h2>
+        </div>
+
+        <div class="prod-journey-grid">
+            <div class="glass-grid reveal">
+                <div class="rubber-card card-red">
+                    <div>
+                        <h3 class="de">Vorhand</h3><h3 class="en">Forehand</h3>
+                        <p class="de">Maximale Rotation und Tempo für kompromisslose Topspins.</p>
+                        <p class="en">Maximum rotation and speed for uncompromising topspins.</p>
+                    </div>
+                    <i class="fas fa-fire" style="font-size: 2rem; opacity: 0.8;"></i>
+                </div>
+                <div class="rubber-card card-black">
+                    <div>
+                        <h3 class="de">Rückhand</h3><h3 class="en">Backhand</h3>
+                        <p class="de">Höchste Kontrolle für den perfekten Block und aggressive Konter.</p>
+                        <p class="en">Ultimate control for the perfect block and aggressive counters.</p>
+                    </div>
+                    <i class="fas fa-shield-alt" style="font-size: 2rem; opacity: 0.8;"></i>
+                </div>
+            </div>
+
+            <div class="vertical-timeline reveal delay-1">
+                <div class="timeline-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h4 class="de">Holz-Auswahl</h4><h4 class="en">Blade Selection</h4>
+                        <p class="de">Wir wählen das Fundament: Carbon, Vollholz, Allround oder OFF+.</p>
+                        <p class="en">We select the foundation: Carbon, solid wood, Allround or OFF+.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h4 class="de">Belag-Tuning</h4><h4 class="en">Rubber Tuning</h4>
+                        <p class="de">Abstimmung von Schwammhärte und Obergummi auf Ihr Spiel.</p>
+                        <p class="en">Matching sponge hardness and top sheet to your game.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h4 class="de">Profi-Montage</h4><h4 class="en">Pro Assembly</h4>
+                        <p class="de">Präzises Schneiden, Kleben und Versiegeln im Store.</p>
+                        <p class="en">Precise cutting, gluing, and sealing in-store.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="timing-reservation">
+        <div class="split-grid">
+            <div class="reveal">
+                <span class="eyebrow de">ÖFFNUNGSZEITEN</span>
+                <span class="eyebrow en">OPENING HOURS</span>
+                <h2 class="section-title de">Besuchen Sie <em>Uns.</em></h2>
+                <h2 class="section-title en">Come <em>Visit Us.</em></h2>
+                <p class="de" style="margin-top:20px; margin-bottom: 30px; font-size: 1.1rem;">Kommen Sie vorbei für eine persönliche Beratung oder holen Sie Ihre Online-Bestellung direkt ab (Kerbside Pickup).</p>
+                <p class="en" style="margin-top:20px; margin-bottom: 30px; font-size: 1.1rem;">Drop by for personal advice or pick up your online order directly (Kerbside Pickup).</p>
+            </div>
+            <div class="reveal delay-1">
+                <div class="scoreboard">
+                    <div class="score-row"><span class="score-day">MO-FR</span><span>10:00 - 13:00</span></div>
+                    <div class="score-row"><span class="score-day">MO-FR</span><span>15:00 - 18:00</span></div>
+                    <div class="score-row today"><span class="score-day">SAT</span><span>10:00 - 14:00</span></div>
+                    <div class="score-row closed"><span class="score-day">SUN</span><span>CLOSED</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reviews-section">
+        <div class="section-header reveal">
+            <span class="eyebrow de">SPIELERSTIMMEN</span>
+            <span class="eyebrow en">PLAYER REVIEWS</span>
+            <h2 class="section-title de">Aus der <em>Community</em></h2>
+            <h2 class="section-title en">From the <em>Community</em></h2>
+        </div>
+
+        <div class="compact-reviews-grid reveal">
+            <div class="compact-review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"Absolutes Fachwissen. Mein Schläger wurde perfekt geklebt. Bester Tischtennis-Store in Darmstadt!"</p>
+                <p class="review-author">Vereinsspieler</p>
+            </div>
+            <div class="compact-review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"Great supply store. Picked up a new Stiga blade and rubbers. Very fast and professional kerbside pickup."</p>
+                <p class="review-author">International Player</p>
+            </div>
+            <div class="compact-review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"Super freundlich und nehmen sich Zeit für die Beratung. Man merkt, dass hier echte Experten am Werk sind."</p>
+                <p class="review-author">Hobbyspieler</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="net-divider"></div>
+
+    <footer>
+        <div class="footer-col">
+            <h2 class="brand">Ping Pong <span>World</span></h2>
+            <p style="margin-top: 20px;">Oberstraße 1<br>64297 Darmstadt, Germany</p>
+            <a href="https://ping-pong-world.com" class="map-action-link" target="_blank">ONLINE SHOP ↗</a>
+        </div>
+        <div class="footer-col">
+            <h4>Kontakt</h4>
+            <p><i class="fas fa-phone"></i> <a href="tel:+4961516695566">06151 6695566</a></p>
+            <p><i class="fas fa-envelope"></i> info@ping-pong-world.com</p>
+        </div>
+        <div class="footer-col">
+            <h4 class="de">Leistungen</h4><h4 class="en">Services</h4>
+            <p>✓ <span class="de">Schlägermontage</span><span class="en">Paddle Assembly</span></p>
+            <p>✓ <span class="de">Vereinsausstattung</span><span class="en">Club Equipment</span></p>
+            <p>✓ <span class="de">Kerbside Pickup</span><span class="en">Kerbside Pickup</span></p>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Ping Pong World Darmstadt. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Ping Pong Ball Cursor Logic
+        const ball = document.getElementById('pingPongBall');
+        let mX = 0, mY = 0, bX = 0, bY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mX = e.clientX;
+            mY = e.clientY;
+        });
+
+        document.addEventListener('mousedown', () => { ball.style.transform = 'translate(-50%, -50%) scale(0.7)'; });
+        document.addEventListener('mouseup', () => { ball.style.transform = 'translate(-50%, -50%) scale(1)'; });
+
+        function renderBall() {
+            // Snappy follow logic for sports feel
+            bX += (mX - bX) * 0.3;
+            bY += (mY - bY) * 0.3;
+            ball.style.left = `${bX}px`;
+            ball.style.top = `${bY}px`;
+            requestAnimationFrame(renderBall);
+        }
+        renderBall();
+
+        // Hover expansions for clickable elements
+        document.querySelectorAll('a, button, input, select, textarea').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                ball.style.width = '24px'; ball.style.height = '24px';
+                ball.style.background = 'radial-gradient(circle at 30% 30%, #fff, var(--court-blue))';
+            });
+            item.addEventListener('mouseleave', () => {
+                ball.style.width = '18px'; ball.style.height = '18px';
+                ball.style.background = 'radial-gradient(circle at 30% 30%, #FFA755, var(--ball-orange))';
+            });
+        });
+
+        // Sticky navigation scroll dynamic trigger
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Multilingual switch logic control
+        function switchLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+            });
+        }
+
+        // Intersection Observer logic for scrolling animations
+        const dynamicObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => dynamicObserver.observe(el));
+    </script>
+</body>
+</html>
